@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seletor de Cores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles copy.css') }}">
+</head>
+<body>
+    <form id="meuFormulario" action="{{ url_for('resultado') }}" method="POST">
+        <div class="form-group">
+            <label for="corSelecionada">Selecione uma cor:</label>
+            <div class="color-picker">
+                <div class="color-option" data-color="#000000" style="background-color: #000000;"></div> <!-- Preto -->
+                <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div> <!-- Vermelho -->
+                <div class="color-option" data-color="#0000ff" style="background-color: #0000ff;"></div> <!-- Azul -->
+                <div class="color-option" data-color="#00ff00" style="background-color: #00ff00;"></div> <!-- Verde -->
+                <div class="color-option" data-color="linear-gradient(135deg, #ff0000 50%, #0000ff 50%)" style="background: linear-gradient(135deg, #ff0000 50%, #0000ff 50%);"></div> <!-- Vermelho e Azul na diagonal -->
+            </div>
+            <input type="hidden" id="corSelecionada" name="corSelecionada" value="">
+            <div id="corExibida"></div>
+        </div>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script src="{{ url_for('static', filename='scripts copy.js') }}"></script>
+</body>
+</html>

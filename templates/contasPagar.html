@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contas à Pagar</title>
+    <link rel="icon" href="/static/pagar.ico" type="image/x-icon">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="{{ url_for('static', filename='sb-admin-2.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    
+    
+    
+</head>
+<body>
+    
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">Menu<span style="color: #0d6efd;">Principal</span></a>
+                    </div>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw text-gray-600 text-lg"></i>
+                                <!-- Counter - Alerts -->
+                                {% if notificacoes|length > 0 %}
+                                <span class="badge1 badge-danger badge-counter"></span>
+                                {% endif %}
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Notificações
+                                </h6>
+
+                                {% for notificacao in notificacoes %}
+                                <div class="dropdown-item d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">{{ notificacao['dataCriacao'] }}</div>
+                                       <a href="http://127.0.0.1:3000/contasPagar/?filter_by=a.id&filter_value={{ notificacao['idRecord'] }}&sort_by=id&order=asc&page=1&page_size=50"> <span title="clique para ir na linha!">{{ notificacao['descricao'] }} </span></a><a class="fas fa-check fa-sm fa-fw mr-2 text-red" href="javascript:void(0);" data-toggle="modal" data-target="#ResolveRecordModal"  data-id="{{ notificacao['idRecord'] }}"></a>
+                                     
+                                        
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </li>
+
+                       
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 text-md">{{ session['username'] }}</span>
+                                <img class="img-profile rounded-circle" src="{{ url_for('static', filename='img/avatar/' ~ session.get('avatar', 'default') ~ '.png') }}">
+
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item text-sm" href="{{ url_for('change_password') }}">
+                                    <i class="fas fa-key fa-sm fa-fw mr-2 text-yellow"></i>
+                                    Trocar senha
+                                </a>                               
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-sm" href="{{ url_for('logoff') }}">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-red"></i>
+                                    Sair
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+    
+    <div class="container">
+        <div class="container-dash">
+            <!-- Card 5: Total Selecionados -->
+            <div class="card">
+                <div class="icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div class="value">
+                    <span id="totalSum">R$ 0,00</span>
+                </div>
+                <div class="label">
+                    Selecionados
+                </div>
+            </div>
+            <!-- Card 1: Total a Pagar Hoje -->
+            <div class="card selecionavel{% if filter_card == 2 %} selecionado{% endif %}" data-filter="hoje">
+                <div class="icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="value">
+                    <span id="totalHoje">R$ {{ "{:,.2f}".format(total_hj if total_hj is not none else 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</span>
+                </div>
+                <div class="label">
+                    Hoje
+                </div>
+            </div>
+
+            <!-- Card 2: Total a Pagar Amanhã -->
+            <div class="card selecionavel{% if filter_card == 3 %} selecionado{% endif %}" data-filter="amanha">
+                <div class="icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="value">
+                    <span id="totalAmanha">R$ {{ "{:,.2f}".format(total_amanha if total_amanha is not none else 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</span>
+                </div>
+                <div class="label">
+                    Amanhã
+                </div>
+            </div>
+
+            <!-- Card 3: Total a Pagar na Semana -->
+            <div class="card selecionavel{% if filter_card == 4 %} selecionado{% endif %}" data-filter="semana">
+                <div class="icon">
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="value">
+                    <span id="totalSemana">R$ {{ "{:,.2f}".format(total_semana if total_semana is not none else 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</span>
+                </div>
+                <div class="label">
+                    Semana
+                </div>
+            </div>
+
+            <!-- Card 4: Total a Pagar no Mês -->
+            <div class="card selecionavel{% if filter_card == 5 %} selecionado{% endif %}" data-filter="mes">
+                <div class="icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="value">
+                    <span id="totalMes">R$ {{ "{:,.2f}".format(total_mes if total_mes is not none else 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</span>
+                </div>
+                <div class="label">
+                    Mês
+                </div>
+            </div>
+            <!-- Card 6: Contas em Atraso -->
+            <div class="card selecionavel{% if filter_card == 1 %} selecionado{% endif %}" id="contasAtraso" data-filter="atraso">
+                <div class="icon">
+                    <i class="fas fas fa-exclamation-triangle"></i> <!-- Ícone de alerta -->
+                </div>
+                <div class="value">
+                    <span id="totalAtraso">R$ {{ "{:,.2f}".format(total_atraso if total_atraso is not none else 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</span>
+                </div>
+                <div class="label">
+                    Contas em Atraso
+                </div>
+                
+            </div>       
+        </div>
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Contas à <b>Pagar</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addRecordModal" class="btn btn-warning" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Novo</span></a>
+                        <a href="#deleteRecordModal1" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Apagar</span></a>
+                        <a href="#PayRecordModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">check</i> <span>Pagar</span></a>
+                        <a href="#NotificationModal" title="Enviar notificação" class="btn btn-primary" data-toggle="modal">
+                            <i class="fa fa-paper-plane"></i> <!-- Exemplo usando FontAwesome -->
+                        </a>                        
+                    </div>
+                </div>
+            </div>
+            <!-- Filter Form -->
+             
+            <form id="filterForm" method="get" class="form-inline mb-3">
+                
+                    <label>Empresa</label>
+                    <select name="filter_emp" id="multiple-checkboxes" multiple="multiple">
+                        <option value="DDP" {% if 'DDP' in filter_emp %}selected{% endif %}>DDP</option>
+                        <option value="WLA - SP" {% if 'WLA - SP' in filter_emp %}selected{% endif %}>WLA - SP</option>
+                        <option value="AW - SP" {% if 'AW - SP' in filter_emp %}selected{% endif %}>AW - SP</option>
+                        <option value="SALW" {% if 'SALW' in filter_emp %}selected{% endif %}>SALW</option>
+                        <option value="LM PE" {% if 'LM PE' in filter_emp %}selected{% endif %}>LM PE</option>
+                        <option value="LM PB" {% if 'LM PB' in filter_emp %}selected{% endif %}>LM PB</option>
+                        <option value="SSM RJ" {% if 'SSM RJ' in filter_emp %}selected{% endif %}>SSM RJ</option>
+                        <option value="VP PIAUÍ" {% if 'VP PIAUÍ' in filter_emp %}selected{% endif %}>VP PIAUÍ</option>
+                        <option value="MM BA" {% if 'MM BA' in filter_emp %}selected{% endif %}>MM BA</option>
+                        <option value="UEDA AM" {% if 'UEDA AM' in filter_emp %}selected{% endif %}>UEDA AM</option>
+                        <option value="LM CE" {% if 'LM CE' in filter_emp %}selected{% endif %}>LM CE</option>
+                        <option value="LM GO" {% if 'LM GO' in filter_emp %}selected{% endif %}>LM GO</option>
+                        <option value="SS MENDES - SP" {% if 'SS MENDES - SP' in filter_emp %}selected{% endif %}>SS MENDES - SP</option>
+                        <option value="AMC - SP" {% if 'AMC - SP' in filter_emp %}selected{% endif %}>AMC - SP</option>
+                        <option value="Salete" {% if 'Salete' in filter_emp %}selected{% endif %}>Salete</option>
+                        <option value="Alexandre" {% if 'Alexandre' in filter_emp %}selected{% endif %}>Alexandre</option>
+                    </select>
+                
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="filter_by" class="sr-only">Filtrar Por</label>
+                    <select name="filter_by" class="form-control" onchange="submitForm()">
+                        <option value="empresa" {% if filter_by == 'empresa' %}selected{% endif %}>Empresa</option>
+                        <option value="origem" {% if filter_by == 'origem' %}selected{% endif %}>Origem</option>
+                        <option value="beneficiario" {% if filter_by == 'beneficiario' %}selected{% endif %}>Beneficiário</option>
+                        <option value="tipoConta" {% if filter_by == 'tipoConta' %}selected{% endif %}>Tipo de Conta</option>
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="filter_value" class="sr-only">Filtro</label>
+                    <input type="text" class="form-control" name="filter_value" placeholder="Filtrar" value="{{ filter_value }}" onkeyup="submitForm()">
+                </div>
+                <!-- Filtro de intervalo de datas -->
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="start_date" class="sr-only">Data Início</label>
+                    <input type="date" class="form-control" name="start_date" value="{{ start_date }}" onchange="submitForm()">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="end_date" class="sr-only">Data Fim</label>
+                    <input type="date" class="form-control" name="end_date" value="{{ end_date }}" onchange="submitForm()">
+                </div>
+                    <!-- Outros campos do formulário -->
+                
+                    <!-- Adicionando campos ocultos para sort_by e order -->
+                <input type="hidden" name="sort_by" id="sortByInput" value="{{ sort_by }}">
+                <input type="hidden" name="order" id="orderInput" value="{{ order }}">
+                
+                
+            
+                <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
+                
+            </form>
+            
+            <!-- Records Table -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+                                <label for="selectAll"></label>
+                            </span>
+                        </th>
+                        <th style="display: none;">ID</th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('empresa')">
+                                Empresa
+                                {% if sort_by == 'empresa' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('origem')">
+                                Origem
+                                {% if sort_by == 'origem' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('data')">
+                                Data
+                                {% if sort_by == 'data' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('valor')">
+                                Valor
+                                {% if sort_by == 'valor' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('formaPgto')">
+                                Forma de Pgto
+                                {% if sort_by == 'formaPgto' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('tipoConta')">
+                                Tipo de Conta
+                                {% if sort_by == 'tipoConta' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="javascript:void(0);" onclick="sortRecords('beneficiario')">
+                                Beneficiario
+                                {% if sort_by == 'beneficiario' %}
+                                    <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Obs</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr class=" c{{row['formatacao'][1:]}}-bold {% if row['origem'] == 'Contas Fixas' %}highlight-yellow{% endif %}">
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" class="row-checkbox" id="checkbox{{ row['id'] }}" name="options[]" value="{{ row['id'] }}" data-value="R$ {{ "{:,.2f}".format(row['valor']) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}" onchange="updateTotalSum()">
+                                <label for="checkbox{{ row['id'] }}"></label>
+                            </span>
+                        </td>     
+                        <td style="display: none;">{{ row['id'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['empresa'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['origem'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['data'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}c0000ff-bold{% endif %}">R$ {{ "{:,.2f}".format(row['valor']) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['formaPgto'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['tipoConta'][16:] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">{{ row['beneficiario'] }}</td>
+                        <td style="display:none;">{{ row['categoria'] }}</td>
+                        <td class="{% if row['formatacao'] == 'linear-gradient(135deg, #ff0000 50%, #0000ff 50%)' %}cff0000-bold{% endif %}">
+                                  {{ row['nfParc'][:10] }}
+                                  {% if row['nfParc']|length > 10 %}...
+                                         <a href="#" class="view-more" data-toggle="modal" data-target="#viewMoreModal" data-obs="{{ row['nfParc'] }}">Ver mais</a>
+                                  {% endif %}
+                                 
+                        </td>
+                        <td style="display: none;">{{ row['nfParc'] }}</td>  
+                        <td style="display:none;">{{ row['formatacao'] }}</td>
+                        <td style="display:none;">{{ row['tipoConta'] }}</td>
+                        <td>
+                            <a href="#editRecordModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="javascript:void(0);" class="delete" data-toggle="modal" data-target="#deleteRecordModal" data-id="{{ row['id'] }}">
+                                <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                            </a>                            
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="clearfix">
+                <!-- Seletor de registros por página -->
+                <div class="form-group">
+                    <label for="pageSizeSelect">Registros por página:</label>
+                    <select id="pageSizeSelect" name="page_size" class="form-control" onchange="updatePageSize()">
+                        <option value="50" {% if page_size == 50 %}selected{% endif %}>50</option>
+                        <option value="100" {% if page_size == 100 %}selected{% endif %}>100</option>
+                        <option value="500" {% if page_size == 500 %}selected{% endif %}>500</option>
+                    </select>
+                </div>
+                
+            
+                <div class="hint-text">
+                    Exibindo <b>{{ rows|length }}</b> de <b>{{ total_records }}</b> registros
+                </div>
+            
+                <!-- Links de Paginação -->
+                <ul class="pagination">
+                    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                        <a href="javascript:void(0);" class="page-link" data-page="{{ page - 1 }}" onclick="changePage(this)">Anterior</a>
+                    </li>
+                    {% for page_num in range(1, total_pages + 1) %}
+                        <li class="page-item {% if page_num == page %}active{% endif %}">
+                            <a href="javascript:void(0);" class="page-link" data-page="{{ page_num }}" onclick="changePage(this)">{{ page_num }}</a>
+                        </li>
+                    {% endfor %}
+                    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                        <a href="javascript:void(0);" class="page-link" data-page="{{ page + 1 }}" onclick="changePage(this)">Próxima</a>
+                    </li>
+                </ul>
+                
+            </div>
+            
+        </div>
+    </div>
+    <!-- Modal de confirmação de exclusão -->
+    <div id="deleteRecordModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmação de Exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja excluir este registro?</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Formulário para exclusão com o ID do registro -->
+                    <form id="deleteForm" method="POST">
+                        <input type="hidden" name="id" id="deleteRecordId">
+                        <!-- Campos ocultos para os parâmetros da query string -->
+                        {% for emp in filter_emp %}
+                        <input type="hidden" name="filter_emp" value="{{ emp }}">
+                        {% endfor %}
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ order }}">
+                        <input type="hidden" name="page" value="{{ page }}">
+                        <input type="hidden" name="page_size" value="{{ page_size }}">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmação de exclusão -->
+    <div id="ResolveRecordModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmação de Resolução</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja encerrar a pendencia?</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Formulário para exclusão com o ID do registro -->
+                    <form id="resolveForm" method="POST">
+                        <input type="hidden" name="id" id="idRecord">
+                        <!-- Campos ocultos para os parâmetros da query string -->
+                        {% for emp in filter_emp %}
+                        <input type="hidden" name="filter_emp" value="{{ emp }}">
+                        {% endfor %}
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ order }}">
+                        <input type="hidden" name="page" value="{{ page }}">
+                        <input type="hidden" name="page_size" value="{{ page_size }}">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Resolver</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewMoreModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="viewMoreModalLabel">Detalhes da Observação</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="fullObsContent"></p>
+					 <i class="fas fa-copy copy-icon" onclick="copyToClipboard(this)" title="Copiar"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Record Modal -->
+    <div id="addRecordModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="addForm" action="{{ url_for('add_record', **request.args) }}" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Novo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                                <label>Empresa</label>
+                                <select name="empresa" class="form-control" required>
+                                    <option>DDP</option>
+                                    <option>WLA - SP</option>
+                                    <option>AW - SP</option>
+                                    <option>SALW</option>
+                                    <option>LM PE</option>
+                                    <option>LM PB</option>
+                                    <option>SSM RJ</option>
+                                    <option>VP PIAUÍ</option>
+                                    <option>MM BA</option>
+                                    <option>UEDA AM</option>
+                                    <option>LM CE</option>
+                                    <option>LM GO</option>
+                                    <option>SS MENDES - SP</option>
+                                    <option>AMC - SP</option>
+                                    <option>Salete</option>
+                                    <option>Alexandre</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Origem</label>
+                                <input type="text" class="form-control" id="origem" name="origem">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Beneficiario</label>
+                            <input type="text" class="form-control" id="beneficiario" name="beneficiario" required>
+                        </div>
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                        
+                                <label>Data</label>
+                                <input type="date" class="form-control" id="data" name="data" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Valor</label>
+                                <input type="text" class="form-control" id="valor" name="valor" required>
+                            </div>
+                        </div>
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                                <label for="FormaPgto">Forma de Pagamento</label>
+                                <input type="text" id="formaPgto" name="formaPgto" class="form-control">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center">
+                                <label for="corSelecionada">Selecione uma cor:</label>
+                                <div class="color-picker">                                    
+                                    <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div> <!-- Vermelho -->
+                                    <div class="color-option" data-color="#0000ff" style="background-color: #0000ff;"></div> <!-- Azul -->
+                                    <div class="color-option" data-color="#00ff00" style="background-color: #00b050;"></div> <!-- Verde -->
+                                    <div class="color-option" data-color="linear-gradient(135deg, #ff0000 50%, #0000ff 50%)" style="background: linear-gradient(135deg, #0000ff 50%,  #ff0000 50%);"></div> 
+                                    <div class="color-option" data-color="#000000" style="background-color: #000000;"></div> <!-- Preto -->
+                                </div>
+                                <input type="hidden" id="corSelecionada" name="corSelecionada" required>
+                                
+                            </div>
+                            
+                        </div>
+                        <!-- Campo de Categoria -->
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="addCategoria" name="categoria" class="form-control" required>
+                                <option value="">Selecione a Categoria</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria }}">{{ categoria }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Campo de Tipo de Conta -->
+                        <div class="form-group">
+                            <label>Tipo de Conta</label>
+                            <select id="addTipoConta" name="tipo_conta" class="form-control" required>
+                                <option value="">Selecione o Tipo de Conta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Obs</label>
+                            <textarea class="form-control" id="obs" name="obs" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Campos ocultos para os parâmetros da query string -->
+                        {% for emp in filter_emp %}
+                        <input type="hidden" name="filter_emp" value="{{ emp }}">
+                        {% endfor %}
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ order }}">
+                        <input type="hidden" name="page" value="{{ page }}">
+                        <input type="hidden" name="page_size" value="{{ page_size }}">
+                        <input type="submit" class="btn btn-success" value="Salvar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   
+    <div id="editRecordModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm" action="{{ url_for('edit_record', **request.args) }}" method="POST">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar Registro</h4>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <!-- Campo oculto para o ID do registro -->
+                        <input type="hidden" id="editId" name="id">
+    
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                                <label>Empresa</label>
+                                <select name="empresa" id ="editEmpresa" class="form-control" required>
+                                    <option>DDP</option>
+                                    <option>WLA</option>
+                                    <option>AW</option>
+                                    <option>SALW</option>
+                                    <option>LM PE</option>
+                                    <option>LM PB</option>
+                                    <option>SSM RJ</option>
+                                    <option>VP PIAUÍ</option>
+                                    <option>MM BA</option>
+                                    <option>UEDA AM</option>
+                                    <option>LM CE</option>
+                                    <option>LM GO</option>
+                                    <option>SS MENDES - SP</option>
+                                    <option>AMC - SP</option>
+                                    <option>Salete</option>
+                                    <option>Alexandre</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Origem</label>
+                                <input type="text" class="form-control" id="editOrigem" name="origem" >
+                            </div>
+                        </div>
+    
+                        <div class="form-group">
+                            <label>Beneficiário</label>
+                            <input type="text" id="editBeneficiario" name="beneficiario" class="form-control" required>
+                        </div>
+    
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                        
+                                <label>Data</label>
+                                <input type="date" class="form-control" id="editData" name="data" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Valor</label>
+                                <input type="text" class="form-control" id="editValor" name="valor" required>
+                            </div>
+                        </div>
+    
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-6">
+                                <label for="editFormaPgto">Forma de Pagamento</label>
+                                <input type="text" id="editFormaPgto" name="formaPgto" class="form-control">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center">
+                                <label for="corSelecionada">Selecione uma cor:</label>
+                                <div class="color-picker">                                    
+                                    <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div> <!-- Vermelho -->
+                                    <div class="color-option" data-color="#0000ff" style="background-color: #0000ff;"></div> <!-- Azul -->
+                                    <div class="color-option" data-color="#00ff00" style="background-color: #00b050;"></div> <!-- Verde -->
+                                    <div class="color-option" data-color="linear-gradient(135deg, #ff0000 50%, #0000ff 50%)" style="background: linear-gradient(135deg, #0000ff 50%,  #ff0000 50%);"></div> 
+                                    <div class="color-option" data-color="#000000" style="background-color: #000000;"></div> <!-- Preto -->
+                                </div>
+                                <input type="hidden" id="editCorSelecionada" name="editCorSelecionada" required>
+                                
+                            </div>
+                            
+                        </div>
+                        <!-- Campo de Categoria -->
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="editCategoria" name="categoria" class="form-control">
+                                <option value="">Selecione a Categoria</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria }}">{{ categoria }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+    
+                        <!-- Campo de Tipo de Conta -->
+                        <div class="form-group">
+                            <label>Tipo de Conta</label>
+                            <select id="editTipoConta" name="editTipoConta" class="form-control">
+                                <option>Selecione o Tipo de Conta</option>
+                            </select>
+                        </div>
+    
+                        <div class="form-group">
+                            <label>Observação</label>
+                            <textarea id="editObs" name="obs" class="form-control"></textarea>
+                        </div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <!-- Campos ocultos para os parâmetros da query string -->
+                        {% for emp in filter_emp %}
+                        <input type="hidden" name="filter_emp" value="{{ emp }}">
+                        {% endfor %}
+                        <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                        <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ order }}">
+                        <input type="hidden" name="page" value="{{ page }}">
+                        <input type="hidden" name="page_size" value="{{ page_size }}">
+                        <input type="submit" class="btn btn-info" name="Salvar" value="Salvar Cópia">
+                        <input type="submit" class="btn btn-warning" name="Alterar" value="Alterar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- Delete Record Modal -->
+<div id="deleteRecordModal1" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteForm1" action="{{ url_for('delete_records', **request.args) }}" method="POST">
+                <div class="modal-header">
+                    <h4 class="modal-title">Excluir Registros</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja excluir estes registros?</p>
+                    <p class="text-warning"><small>Esta ação não pode ser desfeita.</small></p>
+                    <!-- Mostra os IDs dos registros a serem excluídos -->
+                    <p id="recordIds"></p>
+                    <!-- Campo oculto para enviar os IDs -->
+                    <input type="hidden" name="record_ids1" id="recordIdsInput">
+                </div>
+                <div class="modal-footer">
+                    <!-- Campos ocultos para os parâmetros da query string -->
+                    {% for emp in filter_emp %}
+                    <input type="hidden" name="filter_emp" value="{{ emp }}">
+                    {% endfor %}
+                    <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                    <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                    <input type="hidden" name="start_date" value="{{ start_date }}">
+                    <input type="hidden" name="end_date" value="{{ end_date }}">
+                    <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                    <input type="hidden" name="order" value="{{ order }}">
+                    <input type="hidden" name="page" value="{{ page }}">
+                    <input type="hidden" name="page_size" value="{{ page_size }}">
+                    <input type="submit" class="btn btn-danger" value="Deletar">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmação de pagamento -->
+<div id="PayRecordModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="payForm" action="{{ url_for('pay_records', **request.args) }}" method="POST">
+                <div class="modal-header">
+                    <h4 class="modal-title">Pagar Registros</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja alterar para Pago?</p>
+                    <p class="text-warning"><small>Todos os registros foram pagos?</small></p>
+                    <!-- Mostra os IDs dos registros a serem excluídos -->
+                    <p id="recordIds1"></p>
+                    <!-- Campo oculto para enviar os IDs -->
+                    <input type="hidden" name="record_ids1" id="recordIdsInput1">
+                </div>
+                <div class="modal-footer">
+                    <!-- Campos ocultos para os parâmetros da query string -->
+                    {% for emp in filter_emp %}
+                    <input type="hidden" name="filter_emp" value="{{ emp }}">
+                    {% endfor %}
+                    <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                    <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                    <input type="hidden" name="start_date" value="{{ start_date }}">
+                    <input type="hidden" name="end_date" value="{{ end_date }}">
+                    <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                    <input type="hidden" name="order" value="{{ order }}">
+                    <input type="hidden" name="page" value="{{ page }}">
+                    <input type="hidden" name="page_size" value="{{ page_size }}">
+                    <button type="submit" class="btn btn-success">Pagar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal envio de notificação -->
+<div id="NotificationModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="payForm" action="{{ url_for('send_notification', **request.args) }}" method="POST">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enviar Notificação</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Adicione uma descrição!</p>
+                    <div class="form-group">
+                        <textarea id="notificacao" name="notificacao" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                    <select name="username" class="form-control" required>
+                        <option>Denise</option>
+                        <option>Leo</option>
+                        <option>Victor</option>
+                        <option>Walter</option>
+                    </select>
+                    </div>
+                    <!-- Campo oculto para enviar os IDs -->
+                    <input type="hidden" name="record_ids2" id="recordIdsInput2">
+                </div>
+                <div class="modal-footer">
+                    <!-- Campos ocultos para os parâmetros da query string -->
+                    {% for emp in filter_emp %}
+                    <input type="hidden" name="filter_emp" value="{{ emp }}">
+                    {% endfor %}
+                    <input type="hidden" name="filter_by" value="{{ filter_by }}">
+                    <input type="hidden" name="filter_value" value="{{ filter_value }}">
+                    <input type="hidden" name="start_date" value="{{ start_date }}">
+                    <input type="hidden" name="end_date" value="{{ end_date }}">
+                    <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                    <input type="hidden" name="order" value="{{ order }}">
+                    <input type="hidden" name="page" value="{{ page }}">
+                    <input type="hidden" name="page_size" value="{{ page_size }}">
+                    <button type="submit" class="btn btn-warning">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Botão de voltar ao topo -->
+<button id="backToTopBtn" onclick="scrollToTop()">&#8679; Topo</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+    <script>
+       
+        document.addEventListener("DOMContentLoaded", function() {
+            // Adiciona a máscara no campo de valor
+            const valorInput = document.getElementById('valor');
+            valorInput.addEventListener('input', function () {
+                let value = valorInput.value;
+
+                // Remove tudo que não é número, vírgula ou ponto
+                value = value.replace(/[^\d,]/g, '');
+
+                // Converte para o formato monetário
+                const numericValue = parseFloat(value.replace(',', '.')) || 0;
+                valorInput.value = numericValue.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2,
+                });
+            });
+            // Recebendo os dados do Flask já como JSON
+            const tiposContaData = JSON.parse(`{{ tipos_conta | safe }}`);
+
+            function updateTiposConta(categoria, tipoContaSelect, selectedValue) {
+                // Limpa as opções anteriores
+                
+                tipoContaSelect.innerHTML = '<option value="">Selecione o Tipo de Conta</option>';
+                
+                // Adiciona as opções com base na categoria
+                tiposContaData.forEach(function(tipo_Conta) {
+                    if (tipo_Conta.categoria === categoria) {
+                        const option = document.createElement('option');
+                        option.value = tipo_Conta.tipo_conta;
+                        option.textContent = tipo_Conta.tipo_conta;
+                        // Define como selecionada se o valor coincidir com selectedValue
+                        if (selectedValue && tipo_Conta.tipo_conta === selectedValue) {
+                            option.selected = true;
+                        }
+
+                        tipoContaSelect.appendChild(option);
+                    }
+                });
+            }
+            // Função para inicializar o modal de edição com o valor atual
+            function initializeEditModal() {
+                const editCategoria = document.getElementById("editCategoria").value;
+                const editTipoConta = document.getElementById("editTipoConta").getAttribute('data-selected-value');
+                
+                if (editCategoria) {
+                    updateTiposConta(editCategoria, document.getElementById("editTipoConta"), editTipoConta);
+                }
+            }
+
+            // Evento de alteração para o campo "Categoria" no modal de adição
+            document.getElementById("addCategoria").addEventListener("change", function() {
+                updateTiposConta(this.value, document.getElementById("addTipoConta"));
+            });
+
+            // Evento de alteração para o campo "Categoria" no modal de edição
+            document.getElementById("editCategoria").addEventListener("change", function() {
+                updateTiposConta(this.value, document.getElementById("editTipoConta"));
+            });
+            // Evento de clique para abrir o modal de edição e carregar os dados
+            $('.edit').on('click', function() {
+                var row = $(this).closest('tr');
+
+                // Pega os dados da linha da tabela
+                var id = row.find('td:nth-child(2)').text();
+                var origem = row.find('td:nth-child(4)').text();
+                var empresa = row.find('td:nth-child(3)').text();
+                var data = row.find('td:nth-child(5)').text();
+                var valor = row.find('td:nth-child(6)').text();
+                var forma_pgto = row.find('td:nth-child(7)').text();
+                var beneficiario = row.find('td:nth-child(9)').text();
+                var categoria = row.find('td:nth-child(10)').text();
+                var tipoConta = row.find('td:nth-child(14)').text();
+                var obs = row.find('td:nth-child(12)').text();
+                var formatacao = row.find('td:nth-child(13)').text()
+                var dataParts = data.split('/');
+                var formattedDate = dataParts[2] + '-' + dataParts[1] + '-' + dataParts[0];
+                // Preenche o modal com os valores
+                $('#editId').val(id);
+                $('#editOrigem').val(origem);
+                $('#editEmpresa').val(empresa);
+                $('#editData').val(formattedDate);
+                $('#editValor').val(valor);
+                $('#editFormaPgto').val(forma_pgto);
+                $('#editBeneficiario').val(beneficiario);
+                $('#editCategoria').val(categoria);
+                $('#editObs').val(obs);
+                // Seleciona a cor correspondente
+                const colorOptions = document.querySelectorAll('.color-option');
+                colorOptions.forEach(option => {
+                    if (option.getAttribute('data-color') === formatacao) {
+                        option.classList.add('selected');  // Adiciona uma classe para destacar a cor selecionada
+                        document.getElementById('editCorSelecionada').value = formatacao;  // Atualiza o valor do input hidden
+                        
+                    }
+                })
+                // Adiciona um evento de clique a cada opção de cor
+                colorOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Remove a classe 'selected' de todas as opções
+                        colorOptions.forEach(opt => opt.classList.remove('selected'));
+
+                        // Adiciona a classe 'selected' à opção clicada
+                        this.classList.add('selected');
+
+                        // Atualiza o valor do campo oculto com a cor selecionada
+                        const selectedColor = this.getAttribute('data-color');
+                        document.getElementById('editCorSelecionada').value = selectedColor;
+                    });
+                });
+                
+                // Define o valor de tipo de conta no atributo data-selected-value
+                document.getElementById("editTipoConta").setAttribute('data-selected-value', tipoConta);
+                updateTiposConta(categoria, document.getElementById("editTipoConta"), tipoConta);
+
+                
+                $('#editRecordModal').modal('show');
+            });
+            // Inicializar o modal de edição quando ele for aberto
+            $('#editRecordModal').on('show.bs.modal', function (event) {
+                // Defina o valor data-selected-value para o Tipo de Conta                
+                const selectedTipoConta = document.getElementById("editTipoConta").value;
+                document.getElementById("editTipoConta").setAttribute('data-selected-value', selectedTipoConta);
+                // Inicializar os valores do modal de edição
+                initializeEditModal();
+            });
+        });
+        document.getElementById('valor').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            value = (value / 100).toFixed(2); // Converte para o formato de moeda
+            value = value.replace('.', ','); // Substitui o ponto por vírgula
+            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.'); // Adiciona os pontos como separadores de milhar
+            e.target.value = `R$ ${value}`; // Adiciona o símbolo da moeda
+        });
+        document.getElementById('editValor').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            value = (value / 100).toFixed(2); // Converte para o formato de moeda
+            value = value.replace('.', ','); // Substitui o ponto por vírgula
+            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.'); // Adiciona os pontos como separadores de milhar
+            e.target.value = `R$ ${value}`; // Adiciona o símbolo da moeda
+        });
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+
+            const doc = new jsPDF();
+
+            // Configurações do título
+            doc.setFontSize(16);
+            doc.text("Contas à Pagar", 10, 10);
+
+            // Seleciona a tabela
+            const table = document.querySelector(".table");
+
+            // Usa jsPDF AutoTable para processar a tabela com exclusão de colunas
+            doc.autoTable({
+                html: table,
+                startY: 20,
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [0, 123, 255] }, // Azul nos cabeçalhos
+                columnStyles: {
+                    0: { cellWidth: 0 }, // Ignorar a primeira coluna
+                    // Aqui assumimos que a tabela tem n colunas
+                    [table.rows[0].cells.length - 2]: { cellWidth: 0 }, // Ignorar penúltima
+                    [table.rows[0].cells.length - 1]: { cellWidth: 0 }, // Ignorar última
+                },
+            });
+
+            // Salva o PDF
+            doc.save("Contas_a_Pagar.pdf");
+        }
+        function exportToExcel() {
+            // Seleciona a tabela
+            const table = document.querySelector(".table");
+
+            // Cria uma nova tabela para exportar, sem o primeiro e os dois últimos campos
+            const tempTable = document.createElement("table");
+
+            for (const row of table.rows) {
+                const tempRow = tempTable.insertRow();
+
+                for (let i = 1; i < row.cells.length - 2; i++) { // Ignorar a primeira e as duas últimas colunas
+                    const tempCell = tempRow.insertCell();
+                    tempCell.innerHTML = row.cells[i].innerHTML;
+                }
+            }
+
+            // Converte a tabela filtrada para uma planilha
+            const workbook = XLSX.utils.table_to_book(tempTable, { sheet: "Contas a Pagar" });
+
+            // Gera o arquivo Excel
+            XLSX.writeFile(workbook, "Contas_a_Pagar.xlsx");
+        }
+        function resolveNotification(idRecord) {
+            fetch('/resolve_notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({ 'idRecord': idRecord })  // Passando idRecord
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;  // Redireciona após o sucesso
+                } else {
+                    return response.text();
+                }
+            })
+            .then(data => {
+                console.log(data);  // Para debug
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+    </script>  
+</body>
+</html>

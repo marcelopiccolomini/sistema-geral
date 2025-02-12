@@ -1,0 +1,61 @@
+.category-card {
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    background-color: #0d6efd; /* Altera a cor para azul */
+    color: white; /* Altera o texto para branco */
+}
+
+.category-card:hover h5, 
+.category-card:hover .card-text {
+    color: white; /* Garante que o texto fique visível no hover */
+}
+
+.category-card h5 {
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.category-card .card-text {
+    color: #888;
+    margin-top: 5px;
+}
+
+.active-category {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.active-category h5,
+.active-category .card-text {
+    color: #fff;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+.card-img-top {
+    width: 50px; /* Largura */
+    height: 50px; /* Altura */
+    margin: 0 auto 15px; /* Centraliza e dá margem inferior */
+}
+.navbar .welcome-message {
+    margin-right: 10px;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.navbar .logout-link {
+    display: flex;
+    align-items: center;
+}

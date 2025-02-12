@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vizzela-server",
+  "private_key_id": "3f9fe2c572e018b5bbb1ecf9962e36b376bda252",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCj5BZV63hmfriA\nBnOL55Wh5vu05uGY3xbvIcdac6r/7ryRipCYVXH6OfHBFWP8umAiJZIVfyiRCSjy\nTBOFBPf4BjBoIkBG08kopncWWHTdFQMl7lwf4M7nR+j+1OdpTU/jA9YcturKdpu+\n5AbkmejmEpAJ+g5jmoxID4UjHMTj50nzjquUwadQoXYUeKnzcu6PO3OMDJ7jB/rt\nJpFD0n3XlVFqJu76fVyjIc+dcjsmCCxCsslV6nNqJs5i87ZQ13FlSLlIM4KcK1Ne\npJgJvLYTM3SyuQu9oT2iApYZTIK2XH65GkUeLwb0AUV+yH/1q1qHQyDP4gh2muWf\nWpXHu/1nAgMBAAECggEAMBSZkuJOQ694fCKoYkpyBPnpLSSw2XLVXRlJTVlyuLu2\nuXHvwqkKk5DNQkp+t2WMD2h7R3AzG/2WdCLqdRNElhBmwh4OQlkeghz4Aee4fSWN\nc2LOxxFiUcqwaZZXP3bNcXmuJmVpUzVhsqpd9VHL2Ddo52xjLUhpUDixY+AsSPmY\nweznOySkyJpupZxAs2UZN8+1o9u2Ydn8oJk6OgRqm4DUudhInU7IV++AnwDnDNZf\nyJen/68GARM2pNUl2IKTRe9qzQyhTnV05ULvJ5EfLIF1YkhSaeShtUheDQtBbb7N\nD2DH2RkLJXQzuAtcgMZWFkk8EESC6xq+Jwl1tyPblQKBgQDYssd1+9oQXFmbECo2\nNcajOxIY9WjTINI5UB8zM6P4IZNz+81oOgXORzCIAsto5+cRQFBTRH4Y9o0LbuWl\nnhF74YN4eK83+pLTKY1XwKvLc7BNVVMDbhcyqqKt+/LXAnFL3sdOEn4NFwBI6TNU\nKh5MtPrDdJ02QcXgZS6OPw+gKwKBgQDBnXs9IgfHkFeoNNWKoJo81+F13PwVjlES\nfL+kYFDd1/6ZiScQMAVl9x+rEsrMLK5bCOPIEE3z6WpFVTC4wD4OYVlMjFZKT3xL\nhhuiArFfL+r8OlMAti8B06SYF8s6STdek6aBt0TvavF8WfGmQ6duyTRJqDHrBh8A\nZZcvUVC9tQKBgB0XMwu1ubqEi0rzypbodTgoj+9l0qK1P0OObAHVpueCqmbhoNuj\nHnBowi0gIup8Z1q7hY0IHt1/C8RDKPUo2TQGPD4KBYvAScGrTFxBc06mwz4+fBxz\nxQ16NsigkCMpIsiKqbrjZKShN9qR4+Ain1qw2REwMIK+JbBQJQXXlWNtAoGAHaAn\nN1d5sUOY5hgPhMLGVwEBcrN5ryKzrQyBlnlWZluijYO7AnMWoF+L7PVXKp67nxph\nID++bdANfsZmSh7AYBrtOxVOLtiywCupFsUqttHyNt4FzVoTH0hvKwaZBjYlzsbw\n93A/kBLhGJH6s+IuQHlxEsQ1vyyUmc7xrz/WBvECgYA8JRi86PmynodN/meeg6dX\nRZPQHV+R2pwS/TfJNHVaDGVUkVkpZp3l70lYcBGcR9o/6zZezzfL640MjPfr2GSx\nN4ZoW2Y0Cc7NDlbEsBUan3uMeWMJ3A22XvbHATQ8OegCRzRhpouTcZ4AMPtDOgTq\nc9ME5iqEiYW0CXi/lwMxxQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sistema-cobranca@vizzela-server.iam.gserviceaccount.com",
+  "client_id": "109596309803369347276",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sistema-cobranca%40vizzela-server.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
